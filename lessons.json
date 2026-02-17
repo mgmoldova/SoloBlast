@@ -1,0 +1,236 @@
+
+[
+  {
+    "id": "section-1",
+    "title": "Раздел 1: База",
+    "description": "Основы Lua и окружение MoonLoader",
+    "lessons": [
+      {
+        "id": "lua-basics",
+        "title": "Первые шаги",
+        "description": "Переменные, функции и main.",
+        "difficulty": "beginner",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "MoonLoader — это база. Главная функция любого скрипта — `main`. Внутри неё мы пишем бесконечный цикл `while true do wait(0) end`.",
+            "codeSnippet": "function main()\n  print(\"Ку, Blast.hk!\")\n  while true do\n    wait(0)\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Переменные в Lua создаются через оператор присваивания `=`. По умолчанию они глобальные, но крайне рекомендуется использовать ключевое слово `local`, чтобы избежать конфликтов в коде.",
+            "codeSnippet": "local score = 100\nlocal name = \"Player1\"\nlocal isReady = true\n\n-- Конкатенация строк через две точки\nprint(\"Привет, \" .. name)"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Заполни структуру главного цикла:",
+            "codeSnippet": "function {{0}}()\n  while {{1}} do\n    {{2}}(0)\n  end\nend",
+            "options": ["main", "true", "wait", "false", "print", "loop"],
+            "correctAnswers": ["main", "true", "wait"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Свяжи понятия:",
+            "pairs": [
+              { "left": "main", "right": "Точка входа" },
+              { "left": "wait(0)", "right": "Задержка" },
+              { "left": "local", "right": "Локальная переменная" }
+            ]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какой оператор используется для сравнения «равно» в Lua?",
+            "options": ["=", "==", "===", "equals"],
+            "correctAnswer": "=="
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Создай локальную переменную со строкой:",
+            "codeSnippet": "{{0}} myTag = {{1}}Blast.hk{{2}}",
+            "options": ["local", "\"", "\"", "var", "'", "let"],
+            "correctAnswers": ["local", "\"", "\""]
+          }
+        ]
+      },
+      {
+        "id": "file-system",
+        "title": "Конфиги и INI",
+        "description": "Сохраняем настройки скрипта.",
+        "difficulty": "beginner",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Для работы с конфигами на Blast.hk принято использовать библиотеку `inicfg`.",
+            "codeSnippet": "local inicfg = require 'inicfg'\nlocal config = inicfg.load({main = {checked = true}}, 'myscript.ini')"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Подключи библиотеку и загрузи конфиг:",
+            "codeSnippet": "local inicfg = {{0}} 'inicfg'\nlocal cfg = inicfg.{{1}}({opt = 1}, 'test.ini')",
+            "options": ["require", "load", "import", "read", "save"],
+            "correctAnswers": ["require", "load"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Как сохранить конфиг?",
+            "options": ["inicfg.save()", "inicfg.write()", "inicfg.store()"],
+            "correctAnswer": "inicfg.save()"
+          },
+          {
+            "type": "theory",
+            "content": "Чтобы данные действительно записались в файл после изменения таблицы `config`, нужно вызвать метод `save`. Без этого изменения останутся только в оперативной памяти.",
+            "codeSnippet": "config.main.checked = false\ninicfg.save(config, 'myscript.ini')"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Найди пару функции и её назначению:",
+            "pairs": [
+              { "left": "load", "right": "Чтение из файла" },
+              { "left": "save", "right": "Запись в файл" },
+              { "left": "require", "right": "Подключение модуля" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "section-2",
+    "title": "Раздел 2: SAMP & UI",
+    "description": "Взаимодействие с игрой и интерфейсы",
+    "lessons": [
+      {
+        "id": "samp-api",
+        "title": "Работа с чатом",
+        "description": "Команды и сообщения.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "SAMP API требует SAMPfuncs. Основная функция вывода в чат — `sampAddChatMessage`.",
+            "codeSnippet": "sampAddChatMessage(\"Привет, Blast.HK!\", 0xFFFFFF)"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Выведи сообщение и отправь команду:",
+            "codeSnippet": "{{0}}(\"Локально\", -1)\n{{1}}(\"/me съел маслину\")",
+            "options": ["sampAddChatMessage", "sampSendChat", "print", "chatMsg"],
+            "correctAnswers": ["sampAddChatMessage", "sampSendChat"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какой цвет в HEX соответствует белому в SAMP?",
+            "options": ["0x000000", "0xFF0000", "0xFFFFFF", "0xABCDEF"],
+            "correctAnswer": "0xFFFFFF"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Сопоставь функцию и результат:",
+            "pairs": [
+              { "left": "sampSendChat", "right": "Видят все (в чат)" },
+              { "left": "sampAddChatMessage", "right": "Видишь только ты" },
+              { "left": "print", "right": "Только в консоль (~) " }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "imgui-intro",
+        "title": "Введение в ImGui",
+        "description": "Рисуем окна и кнопки.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "ImGui — это графический движок. Для работы нужно подключить библиотеку `imgui`.",
+            "codeSnippet": "local imgui = require \"imgui\""
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Создай кнопку в ImGui:",
+            "codeSnippet": "if imgui.{{0}}(\"Нажми меня\") then\n  print(\"Кнопка нажата!\")\nend",
+            "options": ["Button", "Text", "Input", "Checkbox"],
+            "correctAnswers": ["Button"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Что возвращает функция imgui.Button при клике?",
+            "options": ["Число", "Строку", "Boolean (true)", "Ничего"],
+            "correctAnswer": "Boolean (true)"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Виджеты ImGui:",
+            "pairs": [
+              { "left": "Checkbox", "right": "Галочка (вкл/выкл)" },
+              { "left": "InputText", "right": "Поле ввода текста" },
+              { "left": "Separator", "right": "Разделительная линия" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "section-3",
+    "title": "Раздел 3: Эксперт",
+    "description": "RakNet, Хуки и Низкий уровень",
+    "lessons": [
+      {
+        "id": "events-hooks",
+        "title": "События SAMP.Lua",
+        "description": "Перехват пакетов.",
+        "difficulty": "expert",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Библиотека `samp.events` позволяет удобно обрабатывать RPC.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\nfunction sampev.onServerMessage(color, text)\n  return false\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Что произойдет, если в событии onServerMessage вернуть false?",
+            "options": ["Скрипт вылетит", "Сообщение не появится в чате", "Игра закроется", "Ничего не изменится"],
+            "correctAnswer": "Сообщение не появится в чате"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Перехвати отправку сообщения игроком:",
+            "codeSnippet": "function sampev.{{0}}(message)\n  print(\"Ты хочешь отправить: \" .. {{1}})\nend",
+            "options": ["onSendChat", "message", "onChat", "text", "onClick"],
+            "correctAnswers": ["onSendChat", "message"]
+          }
+        ]
+      },
+      {
+        "id": "raknet-pro",
+        "title": "RakNet & BitStream",
+        "description": "Работа с битами напрямую.",
+        "difficulty": "expert",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "RakNet работает с BitStream. Это поток битов.",
+            "codeSnippet": "local bs = raknetNewBitStream()\nraknetBitStreamWriteInt32(bs, 1337)"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Прочитай целое число из BitStream:",
+            "codeSnippet": "local value = {{0}}({{1}})",
+            "options": ["raknetBitStreamReadInt32", "bs", "raknetRead", "bitStream", "int"],
+            "correctAnswers": ["raknetBitStreamReadInt32", "bs"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Типы данных в BitStream:",
+            "pairs": [
+              { "left": "Int32", "right": "4 байта (целое)" },
+              { "left": "Float", "right": "4 байта (дробное)" },
+              { "left": "Uint8", "right": "1 байт (0-255)" }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]
