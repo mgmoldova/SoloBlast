@@ -1,4 +1,3 @@
-
 [
   {
     "id": "section-1",
@@ -13,13 +12,23 @@
         "tasks": [
           {
             "type": "theory",
-            "content": "MoonLoader — это база. Главная функция любого скрипта — `main`. Внутри неё мы пишем бесконечный цикл `while true do wait(0) end`.",
+            "content": "MoonLoader — это база. Главная функция любого скрипта — `main`. Внутри неё мы пишем бесконечный цикл `while true do wait(0) end`. Без `wait(0)` скрипт заморозит игру — это одна из самых частых ошибок новичков на Blast.hk.",
             "codeSnippet": "function main()\n  print(\"Ку, Blast.hk!\")\n  while true do\n    wait(0)\n  end\nend"
           },
           {
             "type": "theory",
             "content": "Переменные в Lua создаются через оператор присваивания `=`. По умолчанию они глобальные, но крайне рекомендуется использовать ключевое слово `local`, чтобы избежать конфликтов в коде.",
             "codeSnippet": "local score = 100\nlocal name = \"Player1\"\nlocal isReady = true\n\n-- Конкатенация строк через две точки\nprint(\"Привет, \" .. name)"
+          },
+          {
+            "type": "theory",
+            "content": "Директивы — это специальные функции, задающие мета-информацию о скрипте. Например, `script_name`, `script_author`, `script_version`. Их нужно писать до функции `main`.",
+            "codeSnippet": "script_name(\"MyScript\")\nscript_author(\"Blast.hk user\")\nscript_version(\"1.0\")\nscript_description(\"Мой первый скрипт\")\n\nfunction main()\n  while true do\n    wait(0)\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Чтобы работать с SA:MP, нужно дождаться загрузки SAMP. Используй цикл `repeat wait(0) until isSampAvailable()` перед основным кодом.",
+            "codeSnippet": "function main()\n  repeat wait(0) until isSampAvailable()\n  sampAddChatMessage(\"SAMP загружен!\", -1)\n  while true do\n    wait(0)\n  end\nend"
           },
           {
             "type": "fill_blanks",
@@ -33,8 +42,9 @@
             "question": "Свяжи понятия:",
             "pairs": [
               { "left": "main", "right": "Точка входа" },
-              { "left": "wait(0)", "right": "Задержка" },
-              { "left": "local", "right": "Локальная переменная" }
+              { "left": "wait(0)", "right": "Задержка на кадр" },
+              { "left": "local", "right": "Локальная переменная" },
+              { "left": "script_name", "right": "Директива имени скрипта" }
             ]
           },
           {
@@ -44,11 +54,127 @@
             "correctAnswer": "=="
           },
           {
+            "type": "multiple_choice",
+            "question": "Что произойдёт, если в бесконечном цикле не вызывать wait(0)?",
+            "options": [
+              "Скрипт завершится сам",
+              "Игра зависнет",
+              "Цикл выполнится один раз",
+              "Ничего не изменится"
+            ],
+            "correctAnswer": "Игра зависнет"
+          },
+          {
             "type": "fill_blanks",
             "question": "Создай локальную переменную со строкой:",
             "codeSnippet": "{{0}} myTag = {{1}}Blast.hk{{2}}",
             "options": ["local", "\"", "\"", "var", "'", "let"],
             "correctAnswers": ["local", "\"", "\""]
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Добавь директивы имени и автора скрипта:",
+            "codeSnippet": "{{0}}(\"MyCoolScript\")\n{{1}}(\"YourNick\")\n\nfunction main()\n  while true do wait(0) end\nend",
+            "options": ["script_name", "script_author", "script_version", "main_name", "author"],
+            "correctAnswers": ["script_name", "script_author"]
+          }
+        ]
+      },
+      {
+        "id": "lua-types-conditions",
+        "title": "Типы данных и условия",
+        "description": "Числа, строки, булевые, nil и if/else.",
+        "difficulty": "beginner",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "В Lua есть 8 базовых типов: nil, boolean, number, string, function, userdata, thread и table. Большинство работы делается через number, string, boolean и table.",
+            "codeSnippet": "local a = nil        -- nil\nlocal b = true       -- boolean\nlocal c = 42         -- number\nlocal d = 3.14       -- number (float)\nlocal e = \"hello\"    -- string\nlocal f = {}         -- table\n\nprint(type(c))  -- выведет: number"
+          },
+          {
+            "type": "theory",
+            "content": "Условия в Lua пишутся через `if ... then ... elseif ... then ... else ... end`. Важно: в Lua только `nil` и `false` являются ложными — даже `0` считается истиной!",
+            "codeSnippet": "local health = 75\n\nif health > 80 then\n  sampAddChatMessage(\"Здоровье в норме\", 0x00FF00)\nelseif health > 30 then\n  sampAddChatMessage(\"Осторожно!\", 0xFFFF00)\nelse\n  sampAddChatMessage(\"Критично!\", 0xFF0000)\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Циклы в Lua: `while`, `repeat...until` и `for`. В скриптинге для MoonLoader чаще всего используется `while true do wait(0) end`. Для итераций по таблицам — `for k, v in pairs(t) do ... end`.",
+            "codeSnippet": "-- Числовой for\nfor i = 1, 5 do\n  print(i)\nend\n\n-- Итерация по таблице\nlocal players = {\"Bob\", \"Alice\", \"Eve\"}\nfor i, name in ipairs(players) do\n  print(i, name)\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какое значение в Lua является ложным (falsy)?",
+            "options": ["0", "\"\"", "nil", "{}"],
+            "correctAnswer": "nil"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какая функция возвращает тип переменной в Lua?",
+            "options": ["typeof()", "type()", "gettype()", "checktype()"],
+            "correctAnswer": "type()"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Напиши условие: если переменная active равна true — выведи сообщение:",
+            "codeSnippet": "{{0}} active {{1}} true then\n  sampAddChatMessage(\"Активно!\", -1)\n{{2}}",
+            "options": ["if", "==", "end", "then", "elseif", "while"],
+            "correctAnswers": ["if", "==", "end"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Сопоставь тип и пример значения:",
+            "pairs": [
+              { "left": "boolean", "right": "true / false" },
+              { "left": "string", "right": "\"Blast.hk\"" },
+              { "left": "number", "right": "1337" },
+              { "left": "nil", "right": "Отсутствие значения" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "lua-tables-functions",
+        "title": "Таблицы и функции",
+        "description": "Главные структуры данных Lua.",
+        "difficulty": "beginner",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Таблицы (tables) — основная структура данных в Lua. Они могут использоваться как массивы, словари (ключ-значение) или объекты. На Blast.hk таблицы активно используются в конфигах и для хранения данных скрипта.",
+            "codeSnippet": "-- Как массив\nlocal fruits = {\"яблоко\", \"банан\", \"дыня\"}\nprint(fruits[1])  -- \"яблоко\" (индексы с 1!)\n\n-- Как словарь\nlocal player = {\n  name = \"xXxHacker\",\n  health = 100,\n  isAdmin = false\n}\nprint(player.name)  -- \"xXxHacker\"\nprint(player[\"health\"])  -- 100"
+          },
+          {
+            "type": "theory",
+            "content": "Функции в Lua — это полноправные значения. Их можно присваивать переменным, передавать как аргументы и возвращать из других функций. На практике это используется в коллбэках команд и событий.",
+            "codeSnippet": "-- Обычная функция\nfunction greet(name)\n  return \"Привет, \" .. name .. \"!\"\nend\n\n-- Анонимная функция в переменной\nlocal sayBye = function(name)\n  print(\"Пока, \" .. name)\nend\n\nprint(greet(\"Blast.hk\"))  -- Привет, Blast.hk!\nsayBye(\"World\")"
+          },
+          {
+            "type": "theory",
+            "content": "Функция `string.format` позволяет форматировать строки. Это очень удобно для вывода чисел с нужной точностью, создания сообщений в чат и т.п.",
+            "codeSnippet": "local x, y, z = 123.456, 78.9, 0.1\nlocal msg = string.format(\n  \"Координаты: %.2f %.2f %.2f\",\n  x, y, z\n)\nsampAddChatMessage(msg, -1)\n-- Выведет: Координаты: 123.46 78.90 0.10"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Создай таблицу и обратись к её полю:",
+            "codeSnippet": "local cfg = {{0}}\n  enabled = {{1}},\n  speed = 10\n{{2}}\nprint(cfg.enabled)",
+            "options": ["{", "true", "}", "false", "[", "]"],
+            "correctAnswers": ["{", "true", "}"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "С какого индекса начинаются массивы в Lua?",
+            "options": ["0", "1", "-1", "Зависит от контекста"],
+            "correctAnswer": "1"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Методы таблицы / строки:",
+            "pairs": [
+              { "left": "table.insert(t, v)", "right": "Добавить элемент в конец" },
+              { "left": "table.remove(t, i)", "right": "Удалить элемент по индексу" },
+              { "left": "string.len(s)", "right": "Длина строки" },
+              { "left": "string.format(f, ...)", "right": "Форматирование строки" }
+            ]
           }
         ]
       },
@@ -60,8 +186,18 @@
         "tasks": [
           {
             "type": "theory",
-            "content": "Для работы с конфигами на Blast.hk принято использовать библиотеку `inicfg`.",
-            "codeSnippet": "local inicfg = require 'inicfg'\nlocal config = inicfg.load({main = {checked = true}}, 'myscript.ini')"
+            "content": "Для работы с конфигами на Blast.hk принято использовать библиотеку `inicfg`. Она позволяет загружать и сохранять настройки в .ini файлах. Путь к конфигу обычно хранится в папке `moonloader/config/`.",
+            "codeSnippet": "local inicfg = require 'inicfg'\nlocal configPath = 'myscript.ini'\nlocal config = inicfg.load({\n  main = {\n    enabled = true,\n    speed = 100\n  }\n}, configPath)"
+          },
+          {
+            "type": "theory",
+            "content": "Чтобы данные действительно записались в файл после изменения таблицы `config`, нужно вызвать метод `save`. Без этого изменения останутся только в оперативной памяти.",
+            "codeSnippet": "-- Изменяем настройку\nconfig.main.enabled = false\nconfig.main.speed = 200\n\n-- Сохраняем в файл\ninicfg.save(config, 'myscript.ini')\nsampAddChatMessage(\"Настройки сохранены!\", -1)"
+          },
+          {
+            "type": "theory",
+            "content": "Для работы с файлами также используют встроенные Lua-функции: `io.open`, `io.read`, `io.write`. Путь к папке игры можно получить через `getGameDirectory()`.",
+            "codeSnippet": "local dir = getGameDirectory()\nlocal path = dir .. '\\\\moonloader\\\\config\\\\myfile.txt'\n\nlocal file = io.open(path, 'w')\nif file then\n  file:write('Hello, Blast.hk!')\n  file:close()\nend"
           },
           {
             "type": "fill_blanks",
@@ -72,22 +208,71 @@
           },
           {
             "type": "multiple_choice",
-            "question": "Как сохранить конфиг?",
-            "options": ["inicfg.save()", "inicfg.write()", "inicfg.store()"],
-            "correctAnswer": "inicfg.save()"
+            "question": "Как сохранить конфиг через inicfg?",
+            "options": ["inicfg.save(config, path)", "inicfg.write(config)", "inicfg.store(config, path)", "config:save()"],
+            "correctAnswer": "inicfg.save(config, path)"
           },
           {
-            "type": "theory",
-            "content": "Чтобы данные действительно записались в файл после изменения таблицы `config`, нужно вызвать метод `save`. Без этого изменения останутся только в оперативной памяти.",
-            "codeSnippet": "config.main.checked = false\ninicfg.save(config, 'myscript.ini')"
+            "type": "multiple_choice",
+            "question": "Какая функция возвращает путь к папке GTA SA?",
+            "options": ["getGameDirectory()", "getScriptDirectory()", "getBasePath()", "getMoonPath()"],
+            "correctAnswer": "getGameDirectory()"
           },
           {
             "type": "matching_pairs",
             "question": "Найди пару функции и её назначению:",
             "pairs": [
-              { "left": "load", "right": "Чтение из файла" },
-              { "left": "save", "right": "Запись в файл" },
-              { "left": "require", "right": "Подключение модуля" }
+              { "left": "inicfg.load", "right": "Чтение из файла" },
+              { "left": "inicfg.save", "right": "Запись в файл" },
+              { "left": "require", "right": "Подключение модуля" },
+              { "left": "getGameDirectory()", "right": "Путь к корню игры" }
+            ]
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Измени настройку и сохрани конфиг:",
+            "codeSnippet": "config.main.enabled = {{0}}\n{{1}}.save(config, 'test.ini')",
+            "options": ["false", "inicfg", "true", "config", "ini"],
+            "correctAnswers": ["false", "inicfg"]
+          }
+        ]
+      },
+      {
+        "id": "moonloader-threads",
+        "title": "Потоки и корутины",
+        "description": "Параллельное выполнение логики.",
+        "difficulty": "beginner",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "В MoonLoader используются Lua-корутины (luathread) для параллельной работы. Функция `lua_thread.create` позволяет запустить новый поток. Это удобно для разделения логики скрипта и рендеринга.",
+            "codeSnippet": "require 'lib.moonloader'\n\nfunction main()\n  lua_thread.create(function()\n    while true do\n      wait(1000)\n      sampAddChatMessage(\"Тик каждую секунду\", -1)\n    end\n  end)\n  while true do\n    wait(0)\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Функция `wait(ms)` останавливает текущий поток на заданное количество миллисекунд. `wait(0)` — ожидание одного кадра. `wait(1000)` — секунда.",
+            "codeSnippet": "function main()\n  while true do\n    wait(5000)  -- Ждём 5 секунд\n    sampAddChatMessage(\"5 секунд прошло!\", 0x00FFFF)\n  end\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Сколько миллисекунд ждёт wait(1000)?",
+            "options": ["1 миллисекунду", "100 миллисекунд", "1 секунду", "10 секунд"],
+            "correctAnswer": "1 секунду"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Запусти новый поток через lua_thread:",
+            "codeSnippet": "{{0}}.create(function()\n  while true do\n    {{1}}(500)\n    print(\"поток работает\")\n  end\nend)",
+            "options": ["lua_thread", "wait", "thread", "coroutine", "sleep"],
+            "correctAnswers": ["lua_thread", "wait"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Задержки и их значения:",
+            "pairs": [
+              { "left": "wait(0)", "right": "Один кадр" },
+              { "left": "wait(1000)", "right": "Одна секунда" },
+              { "left": "wait(100)", "right": "0.1 секунды" }
             ]
           }
         ]
@@ -101,14 +286,29 @@
     "lessons": [
       {
         "id": "samp-api",
-        "title": "Работа с чатом",
-        "description": "Команды и сообщения.",
+        "title": "Работа с чатом и командами",
+        "description": "Команды, сообщения, диалоги.",
         "difficulty": "intermediate",
         "tasks": [
           {
             "type": "theory",
-            "content": "SAMP API требует SAMPfuncs. Основная функция вывода в чат — `sampAddChatMessage`.",
-            "codeSnippet": "sampAddChatMessage(\"Привет, Blast.HK!\", 0xFFFFFF)"
+            "content": "SAMP API требует SAMPfuncs и библиотеку SAMP.Lua. Основная функция вывода в чат — `sampAddChatMessage(text, color)`. Цвет передаётся как HEX число: 0xRRGGBB или -1 для цвета по умолчанию.",
+            "codeSnippet": "-- Белый текст\nsampAddChatMessage(\"Привет, Blast.HK!\", 0xFFFFFF)\n\n-- Зелёный текст\nsampAddChatMessage(\"Успех!\", 0x00FF00)\n\n-- Красный текст\nsampAddChatMessage(\"Ошибка!\", 0xFF0000)\n\n-- Цвет по умолчанию (белый)\nsampAddChatMessage(\"По умолчанию\", -1)"
+          },
+          {
+            "type": "theory",
+            "content": "`sampRegisterChatCommand` регистрирует чат-команду. Функция-обработчик получает строку `param` — всё, что написано после команды. Команду нужно регистрировать ДО основного цикла `while true do`.",
+            "codeSnippet": "function main()\n  repeat wait(0) until isSampAvailable()\n\n  sampRegisterChatCommand('mycommand', function(param)\n    -- param — аргументы после команды\n    if param == '' then\n      sampAddChatMessage('Нет аргументов', -1)\n    else\n      sampAddChatMessage('Ты написал: ' .. param, -1)\n    end\n  end)\n\n  while true do\n    wait(0)\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "`sampSendChat(text)` отправляет текст в чат от имени игрока — это видно всем. `sampAddChatMessage` — локальное сообщение только для тебя. Для отправки команд типа `/me` используй `sampSendChat`.",
+            "codeSnippet": "-- Видят все игроки\nsampSendChat(\"/me машет рукой\")\n\n-- Видишь только ты\nsampAddChatMessage(\"[СКРИПТ] Команда выполнена\", 0xAAFF00)\n\n-- Только в консоль MoonLoader (~)\nprint(\"debug: команда вызвана\")"
+          },
+          {
+            "type": "theory",
+            "content": "Диалоги SA:MP можно показывать через `sampShowDialog` и читать ответ через `sampHasDialogRespond`. Это основа для создания простых меню без ImGui.",
+            "codeSnippet": "-- В команде:\nsampRegisterChatCommand('menu', function()\n  local items = \"Телепорт\\nХилл\\nАвтобот\"\n  sampShowDialog(1337, \"Мод меню\", items, \"Выбрать\", \"Закрыть\", 2)\nend)\n\n-- В цикле:\nwhile true do\n  wait(0)\n  local res, btn, list = sampHasDialogRespond(1337)\n  if res and btn == 1 then\n    sampAddChatMessage(\"Выбрано: \" .. list, -1)\n  end\nend"
           },
           {
             "type": "fill_blanks",
@@ -124,12 +324,70 @@
             "correctAnswer": "0xFFFFFF"
           },
           {
+            "type": "multiple_choice",
+            "question": "Где нужно регистрировать команду через sampRegisterChatCommand?",
+            "options": [
+              "После основного цикла while true",
+              "До основного цикла while true",
+              "Внутри ImGui.OnDrawFrame",
+              "Не имеет значения"
+            ],
+            "correctAnswer": "До основного цикла while true"
+          },
+          {
             "type": "matching_pairs",
             "question": "Сопоставь функцию и результат:",
             "pairs": [
               { "left": "sampSendChat", "right": "Видят все (в чат)" },
               { "left": "sampAddChatMessage", "right": "Видишь только ты" },
-              { "left": "print", "right": "Только в консоль (~) " }
+              { "left": "print", "right": "Только в консоль (~)" },
+              { "left": "sampShowDialog", "right": "Показать диалоговое окно" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "samp-player",
+        "title": "Работа с игроком и миром",
+        "description": "Получение данных о персонаже и окружении.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "MoonLoader даёт доступ к GTA SA API через стандартные функции. `PLAYER_PED` — глобальный хэндл персонажа. Основные функции: `getCharCoordinates`, `getCharHealth`, `isCharInAnyCar`.",
+            "codeSnippet": "local x, y, z = getCharCoordinates(PLAYER_PED)\nlocal health = getCharHealth(PLAYER_PED)\nlocal inCar = isCharInAnyCar(PLAYER_PED)\n\nsampAddChatMessage(\n  string.format(\"Позиция: %.2f, %.2f, %.2f | HP: %d | В машине: %s\",\n    x, y, z, health, tostring(inCar)\n  ), -1\n)"
+          },
+          {
+            "type": "theory",
+            "content": "Для работы с другими игроками в SA:MP используй `sampGetPlayerIdByCharHandle` для получения ID, а `sampGetPlayerNickname`, `sampGetPlayerPos` для данных. Всегда проверяй существование игрока через `sampIsPlayerConnected`.",
+            "codeSnippet": "local _, myId = sampGetPlayerIdByCharHandle(PLAYER_PED)\nlocal myNick = sampGetPlayerNickname(myId)\nlocal myPing = sampGetPlayerPing(myId)\n\nsampAddChatMessage(\n  string.format(\"%s [%d] | Пинг: %d мс\",\n    myNick, myId, myPing\n  ), 0xFFAA00\n)"
+          },
+          {
+            "type": "theory",
+            "content": "Для работы с клавишами используй библиотеку `vkeys`. Функции: `isKeyDown(key)` — кнопка зажата, `wasKeyPressed(key)` — кнопка нажата (единожды). Коды клавиш доступны как `vkeys.VK_INSERT`, `vkeys.VK_F1` и т.д.",
+            "codeSnippet": "local vkeys = require 'vkeys'\n\nfunction main()\n  while true do\n    wait(0)\n    if wasKeyPressed(vkeys.VK_INSERT) then\n      sampAddChatMessage(\"Insert нажат!\", 0x00FF00)\n    end\n    if isKeyDown(vkeys.VK_LMENU) and isKeyJustPressed(vkeys.VK_M) then\n      sampAddChatMessage(\"Alt+M нажато!\", 0x00FFFF)\n    end\n  end\nend"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Получи координаты и здоровье персонажа:",
+            "codeSnippet": "local x, y, z = {{0}}(PLAYER_PED)\nlocal hp = {{1}}(PLAYER_PED)\nprint(x, y, z, hp)",
+            "options": ["getCharCoordinates", "getCharHealth", "getPlayerPos", "getHP", "getPos"],
+            "correctAnswers": ["getCharCoordinates", "getCharHealth"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Как называется глобальный хэндл персонажа игрока?",
+            "options": ["PLAYER", "PLAYER_PED", "playerHandle", "playerChar"],
+            "correctAnswer": "PLAYER_PED"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Функции и их описания:",
+            "pairs": [
+              { "left": "getCharCoordinates", "right": "Позиция X, Y, Z" },
+              { "left": "getCharHealth", "right": "Здоровье персонажа" },
+              { "left": "isCharInAnyCar", "right": "В транспорте ли" },
+              { "left": "sampGetPlayerNickname", "right": "Ник по ID" }
             ]
           }
         ]
@@ -142,13 +400,23 @@
         "tasks": [
           {
             "type": "theory",
-            "content": "ImGui — это графический движок. Для работы нужно подключить библиотеку `imgui`.",
-            "codeSnippet": "local imgui = require \"imgui\""
+            "content": "ImGui — это графический движок для создания GUI в скриптах MoonLoader. Есть два варианта: классический Moon ImGui (`require 'imgui'`) и более современный mimgui (`require 'mimgui'`). На Blast.hk широко используется как первый, так и второй.",
+            "codeSnippet": "local imgui = require 'imgui'\nlocal encoding = require 'encoding'\nencoding.default = 'CP1251'\nu8 = encoding.UTF8\n\n-- Обязателен для русского текста!\n-- Строки в ImGui передаём как u8('Текст')"
+          },
+          {
+            "type": "theory",
+            "content": "Основной паттерн работы с ImGui: флаг `imgui.ImBool` управляет видимостью окна. `imgui.Process = true/false` включает/выключает рендеринг. Всё рисование происходит в функции `imgui.OnDrawFrame`.",
+            "codeSnippet": "local imgui = require 'imgui'\nlocal win = imgui.ImBool(false)\n\nfunction main()\n  sampRegisterChatCommand('gui', function()\n    win.v = not win.v\n    imgui.Process = win.v\n  end)\n  while true do wait(0) end\nend\n\nfunction imgui.OnDrawFrame()\n  if win.v then\n    imgui.SetNextWindowSize(imgui.ImVec2(300, 200), imgui.Cond.FirstUseEver)\n    imgui.Begin('Моё окно', win)\n    imgui.Text(u8('Привет, Blast.hk!'))\n    if imgui.Button(u8('Нажми меня')) then\n      sampAddChatMessage('Кнопка нажата!', -1)\n    end\n    imgui.End()\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "`imgui.ImBool`, `imgui.ImFloat`, `imgui.ImInt`, `imgui.ImBuffer` — это специальные Lua-обёртки для передачи значений по ссылке в ImGui. Значение хранится в поле `.v`.",
+            "codeSnippet": "local cbState = imgui.ImBool(false)   -- Чекбокс\nlocal slider  = imgui.ImFloat(50.0)   -- Слайдер\nlocal input   = imgui.ImBuffer(128)   -- Поле ввода\n\n-- В OnDrawFrame:\nimgui.Checkbox(u8('Включено'), cbState)\nimgui.SliderFloat(u8('Скорость'), slider, 0.0, 100.0)\nimgui.InputText(u8('Ник'), input)\n\nif cbState.v then\n  -- логика когда включено\nend"
           },
           {
             "type": "fill_blanks",
             "question": "Создай кнопку в ImGui:",
-            "codeSnippet": "if imgui.{{0}}(\"Нажми меня\") then\n  print(\"Кнопка нажата!\")\nend",
+            "codeSnippet": "if imgui.{{0}}(u8(\"Нажми меня\")) then\n  sampAddChatMessage(\"Кнопка нажата!\", -1)\nend",
             "options": ["Button", "Text", "Input", "Checkbox"],
             "correctAnswers": ["Button"]
           },
@@ -159,12 +427,77 @@
             "correctAnswer": "Boolean (true)"
           },
           {
+            "type": "multiple_choice",
+            "question": "Для чего используется `imgui.ImBool(false)`?",
+            "options": [
+              "Для сравнения с false",
+              "Передача булева значения по ссылке в ImGui виджеты",
+              "Для проверки типа",
+              "Это просто алиас для false"
+            ],
+            "correctAnswer": "Передача булева значения по ссылке в ImGui виджеты"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Включи обработку ImGui при открытии окна:",
+            "codeSnippet": "win.v = {{0}} win.v\n{{1}}.Process = win.v",
+            "options": ["not", "imgui", "true", "false", "and"],
+            "correctAnswers": ["not", "imgui"]
+          },
+          {
             "type": "matching_pairs",
             "question": "Виджеты ImGui:",
             "pairs": [
               { "left": "Checkbox", "right": "Галочка (вкл/выкл)" },
               { "left": "InputText", "right": "Поле ввода текста" },
-              { "left": "Separator", "right": "Разделительная линия" }
+              { "left": "Separator", "right": "Разделительная линия" },
+              { "left": "SliderFloat", "right": "Ползунок с дробным числом" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "imgui-advanced",
+        "title": "ImGui: продвинутые элементы",
+        "description": "Вкладки, колонки, стили, кодировка.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Для корректного отображения русского текста в ImGui необходимо конвертировать кодировку. Скрипт должен быть сохранён в Windows-1251. Строки передаются через функцию `u8()`.",
+            "codeSnippet": "local encoding = require 'encoding'\nencoding.default = 'CP1251'\nu8 = encoding.UTF8\n\n-- Теперь русский текст работает:\nimgui.Text(u8('Привет, мир!'))\nimgui.Button(u8('Кнопка'))"
+          },
+          {
+            "type": "theory",
+            "content": "Вкладки в ImGui создаются через `BeginTabBar` / `EndTabBar` и `BeginTabItem` / `EndTabItem`. Это удобно для организации разделов в большом меню.",
+            "codeSnippet": "if imgui.BeginTabBar('##tabs') then\n  if imgui.BeginTabItem(u8('Игрок')) then\n    imgui.Text(u8('Настройки игрока'))\n    imgui.EndTabItem()\n  end\n  if imgui.BeginTabItem(u8('Авто')) then\n    imgui.Text(u8('Настройки авто'))\n    imgui.EndTabItem()\n  end\n  imgui.EndTabBar()\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Для изменения цвета элементов ImGui используй `imgui.PushStyleColor` / `imgui.PopStyleColor`. Цвет передаётся как `imgui.ImVec4(r, g, b, alpha)` — значения от 0.0 до 1.0.",
+            "codeSnippet": "-- Красная кнопка\nimgui.PushStyleColor(imgui.Col.Button,\n  imgui.ImVec4(0.8, 0.1, 0.1, 1.0))\nimgui.Button(u8('Опасно!'))\nimgui.PopStyleColor()"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "В какой кодировке должен быть сохранён .lua файл для русского текста в ImGui?",
+            "options": ["UTF-8", "ASCII", "Windows-1251", "KOI8-R"],
+            "correctAnswer": "Windows-1251"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Начни отрисовку вкладок:",
+            "codeSnippet": "if imgui.{{0}}('##mytabs') then\n  if imgui.{{1}}(u8('Раздел 1')) then\n    -- содержимое\n    imgui.{{2}}()\n  end\n  imgui.EndTabBar()\nend",
+            "options": ["BeginTabBar", "BeginTabItem", "EndTabItem", "BeginTabs", "TabItem"],
+            "correctAnswers": ["BeginTabBar", "BeginTabItem", "EndTabItem"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Методы стилизации ImGui:",
+            "pairs": [
+              { "left": "PushStyleColor", "right": "Изменить цвет элемента" },
+              { "left": "PopStyleColor", "right": "Вернуть прежний цвет" },
+              { "left": "ImVec4", "right": "RGBA вектор цвета" },
+              { "left": "SetNextWindowSize", "right": "Задать размер окна" }
             ]
           }
         ]
@@ -173,24 +506,39 @@
   },
   {
     "id": "section-3",
-    "title": "Раздел 3: Эксперт",
-    "description": "RakNet, Хуки и Низкий уровень",
+    "title": "Раздел 3: Сеть и Память",
+    "description": "SAMP Events, HTTP, Memory и продвинутые API",
     "lessons": [
       {
-        "id": "events-hooks",
-        "title": "События SAMP.Lua",
-        "description": "Перехват пакетов.",
-        "difficulty": "expert",
+        "id": "samp-events",
+        "title": "Библиотека SAMP.Lua Events",
+        "description": "Перехват входящих и исходящих RPC/пакетов.",
+        "difficulty": "intermediate",
         "tasks": [
           {
             "type": "theory",
-            "content": "Библиотека `samp.events` позволяет удобно обрабатывать RPC.",
-            "codeSnippet": "local sampev = require 'lib.samp.events'\nfunction sampev.onServerMessage(color, text)\n  return false\nend"
+            "content": "SAMP.Lua — библиотека от FYP, официально размещённая на Blast.hk. Она добавляет систему событий для перехвата RPC пакетов. Подключается через `require 'lib.samp.events'`. Если вернуть `false` из обработчика — событие будет заблокировано.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\n\n-- Перехват входящих сообщений сервера\nfunction sampev.onServerMessage(color, text)\n  if text:find('Вас забанили') then\n    -- Блокируем отображение\n    return false\n  end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Можно перехватывать исходящие события. `onSendChat` срабатывает когда игрок отправляет сообщение. Можно изменить данные, вернув новые значения в таблице.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\n\n-- Перехватить исходящее сообщение\nfunction sampev.onSendChat(message)\n  print('Ты отправляешь: ' .. message)\n  -- Изменить текст перед отправкой:\n  return {'(автор) ' .. message}\nend\n\n-- Перехватить нажатие на текстдрав\nfunction sampev.onSendClickTextdraw(id)\n  print('Нажат текстдрав ID: ' .. id)\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Событие `onShowDialog` срабатывает при показе диалога сервером. Можно автоматически отвечать на определённые диалоги — это основа для автоматизации на RP серверах.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\n\nfunction sampev.onShowDialog(id, style, title, btn1, btn2, text)\n  if title == 'Авторизация' then\n    -- Автоматически закрыть диалог\n    sampev.onShowDialog = nil  -- отключить\n    sampSendDialogResponse(id, 1, -1, 'mypassword')\n    return false  -- скрыть диалог от игрока\n  end\nend"
           },
           {
             "type": "multiple_choice",
             "question": "Что произойдет, если в событии onServerMessage вернуть false?",
-            "options": ["Скрипт вылетит", "Сообщение не появится в чате", "Игра закроется", "Ничего не изменится"],
+            "options": [
+              "Скрипт вылетит",
+              "Сообщение не появится в чате",
+              "Игра закроется",
+              "Ничего не изменится"
+            ],
             "correctAnswer": "Сообщение не появится в чате"
           },
           {
@@ -199,6 +547,162 @@
             "codeSnippet": "function sampev.{{0}}(message)\n  print(\"Ты хочешь отправить: \" .. {{1}})\nend",
             "options": ["onSendChat", "message", "onChat", "text", "onClick"],
             "correctAnswers": ["onSendChat", "message"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Как изменить данные в исходящем событии SAMP.Lua?",
+            "options": [
+              "Через глобальную переменную",
+              "Вернуть таблицу с новыми значениями",
+              "Вызвать event.modify()",
+              "Через sampSendChat"
+            ],
+            "correctAnswer": "Вернуть таблицу с новыми значениями"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Сопоставь событие и триггер:",
+            "pairs": [
+              { "left": "onServerMessage", "right": "Входящее сообщение сервера" },
+              { "left": "onSendChat", "right": "Исходящее сообщение игрока" },
+              { "left": "onShowDialog", "right": "Сервер показывает диалог" },
+              { "left": "onSendClickTextdraw", "right": "Клик по текстдраву" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "http-requests",
+        "title": "Асинхронные HTTP запросы",
+        "description": "Взаимодействие с внешними API и сервисами.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Для HTTP запросов в MoonLoader используется библиотека `requests` (поставляется с MoonLoader). Важно делать запросы асинхронно, чтобы не зависал основной поток. Тема с гайдом есть на Blast.hk.",
+            "codeSnippet": "local requests = require 'requests'\n\nfunction main()\n  -- Асинхронный GET запрос\n  local response = requests.get('https://api.example.com/data')\n  if response.status_code == 200 then\n    local data = response.json()\n    sampAddChatMessage('Получено: ' .. tostring(data.result), -1)\n  end\n  while true do wait(0) end\nend"
+          },
+          {
+            "type": "theory",
+            "content": "Для надёжного выполнения HTTP запросов их рекомендуют запускать в отдельном потоке через `lua_thread.create`. Это позволяет не блокировать основной игровой цикл во время ожидания ответа.",
+            "codeSnippet": "function main()\n  lua_thread.create(function()\n    local r = requests.get('https://api.example.com/version')\n    if r and r.status_code == 200 then\n      local json = r.json()\n      sampAddChatMessage('Версия: ' .. json.version, 0x00FF00)\n    end\n  end)\n  while true do wait(0) end\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какую библиотеку используют для HTTP запросов в MoonLoader?",
+            "options": ["http", "requests", "curl", "fetch"],
+            "correctAnswer": "requests"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Почему HTTP запросы рекомендуют делать в отдельном потоке?",
+            "options": [
+              "Это обязательное требование MoonLoader",
+              "Чтобы не блокировать основной игровой цикл",
+              "Иначе запрос не выполнится",
+              "Для безопасности"
+            ],
+            "correctAnswer": "Чтобы не блокировать основной игровой цикл"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Сделай GET запрос и проверь статус:",
+            "codeSnippet": "local r = requests.{{0}}('https://example.com/api')\nif r.{{1}} == 200 then\n  print('OK!')\nend",
+            "options": ["get", "status_code", "post", "status", "code"],
+            "correctAnswers": ["get", "status_code"]
+          }
+        ]
+      },
+      {
+        "id": "memory-work",
+        "title": "Работа с памятью",
+        "description": "Чтение и запись памяти GTA SA.",
+        "difficulty": "intermediate",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "MoonLoader предоставляет встроенный модуль `memory` для чтения/записи памяти процесса. Также используется FFI через `require 'ffi'` для более низкоуровневой работы.",
+            "codeSnippet": "local memory = require 'memory'\n\n-- Прочитать DWORD по адресу\nlocal value = memory.getdword(0x7A6E74)\nprint('Значение: ' .. value)\n\n-- Записать байт\nmemory.setbyte(0x7A6E74, 255)\n\n-- Прочитать float\nlocal f = memory.getfloat(0xB7CD98)\nprint('Float: ' .. f)"
+          },
+          {
+            "type": "theory",
+            "content": "Для патчинга кода используют функцию `memory.fill` для записи NOP-байт, или `memory.setbyte/setword/setdword`. Это позволяет, например, снять лимиты карты, изменить поведение игры.",
+            "codeSnippet": "local memory = require 'memory'\n\n-- Патчим 6 байт NOPами (0x90 = NOP в x86)\nfor i = 0, 5 do\n  memory.setbyte(0x571A50 + i, 0x90)\nend\n\n-- Восстановление оригинальных байт\nlocal original = {0x80, 0x3D, 0x70, 0xDC, 0xA9, 0x00}\nfor i, b in ipairs(original) do\n  memory.setbyte(0x571A50 + i - 1, b)\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какой модуль используется для чтения памяти в MoonLoader?",
+            "options": ["mem", "memory", "memread", "ffi"],
+            "correctAnswer": "memory"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Функции модуля memory:",
+            "pairs": [
+              { "left": "memory.getdword", "right": "Прочитать 4 байта" },
+              { "left": "memory.setbyte", "right": "Записать 1 байт" },
+              { "left": "memory.getfloat", "right": "Прочитать дробное число" },
+              { "left": "memory.fill", "right": "Заполнить диапазон байтами" }
+            ]
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Прочитай значение из памяти и выведи его:",
+            "codeSnippet": "local memory = {{0}} 'memory'\nlocal val = memory.{{1}}(0xB7CD98)\nprint('HP: ' .. val)",
+            "options": ["require", "getdword", "import", "read", "getbyte"],
+            "correctAnswers": ["require", "getdword"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "section-4",
+    "title": "Раздел 4: Эксперт",
+    "description": "RakNet, Хуки и Низкий уровень",
+    "lessons": [
+      {
+        "id": "events-hooks",
+        "title": "События SAMP.Lua (продвинуто)",
+        "description": "Перехват пакетов и кастомные RPC.",
+        "difficulty": "expert",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Библиотека `samp.events` позволяет удобно обрабатывать входящие RPC и пакеты. Помимо стандартных событий, можно добавлять обработчики для кастомных RPC через `sampev.INTERFACE.INCOMING_RPCS`.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\nlocal raknet = require 'samp.raknet'\n\n-- Добавить кастомный обработчик RPC\nsampev.INTERFACE.INCOMING_RPCS[raknet.RPC.PLAYSOUND] = {\n  'onPlaySound',\n  {soundId = 'int32'},\n  {coordinates = 'vector3d'}\n}"
+          },
+          {
+            "type": "theory",
+            "content": "Событие `onSetPlayerPos` блокирует принудительное перемещение игрока сервером. Это базовая защита от teleport-кика в некоторых сценариях.",
+            "codeSnippet": "local sampev = require 'lib.samp.events'\n\n-- Блокировать принудительный телепорт от сервера\nfunction sampev.onSetPlayerPos(position)\n  -- Вернуть false = заблокировать\n  return false\nend\n\n-- Или переписать позицию\nfunction sampev.onSetPlayerPos(position)\n  return {{x = position.x, y = position.y, z = position.z + 1.0}}\nend"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Что произойдет, если в событии onServerMessage вернуть false?",
+            "options": [
+              "Скрипт вылетит",
+              "Сообщение не появится в чате",
+              "Игра закроется",
+              "Ничего не изменится"
+            ],
+            "correctAnswer": "Сообщение не появится в чате"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Перехвати отправку сообщения игроком:",
+            "codeSnippet": "function sampev.{{0}}(message)\n  print(\"Ты хочешь отправить: \" .. {{1}})\nend",
+            "options": ["onSendChat", "message", "onChat", "text", "onClick"],
+            "correctAnswers": ["onSendChat", "message"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Что делает возврат из события:",
+            "pairs": [
+              { "left": "return false", "right": "Заблокировать событие" },
+              { "left": "return {новые данные}", "right": "Изменить данные события" },
+              { "left": "return nil / ничего", "right": "Пропустить без изменений" }
+            ]
           }
         ]
       },
@@ -210,24 +714,139 @@
         "tasks": [
           {
             "type": "theory",
-            "content": "RakNet работает с BitStream. Это поток битов.",
-            "codeSnippet": "local bs = raknetNewBitStream()\nraknetBitStreamWriteInt32(bs, 1337)"
+            "content": "RakNet — сетевой движок SA:MP. BitStream — поток байт для передачи данных. Библиотека RakLua от #Northn (Blast.hk) добавляет удобные функции для работы с ним: `raknetNewBitStream`, `raknetBitStreamWriteInt32`, `raknetSendBitStreamEx` и другие.",
+            "codeSnippet": "-- Создать новый BitStream\nlocal bs = raknetNewBitStream()\n\n-- Записать int32\nraknetBitStreamWriteInt32(bs, 1337)\n\n-- Записать float\nraknetBitStreamWriteFloat(bs, 3.14)\n\n-- Записать bool\nraknetBitStreamWriteBool(bs, true)\n\n-- Отправить как RPC\nraknetSendRpcEx(raknet.RPC.PLAYSOUND, bs)"
+          },
+          {
+            "type": "theory",
+            "content": "Для чтения из BitStream используются `raknetBitStreamReadInt32`, `raknetBitStreamReadFloat` и т.д. Важно читать типы в том же порядке, в котором они были записаны — иначе данные окажутся некорректными.",
+            "codeSnippet": "-- Пример перехвата пакета через SAMP.Lua\nlocal sampev = require 'lib.samp.events'\n\nfunction sampev.onBulletSync(playerid, data)\n  print(string.format(\n    'Игрок %d стреляет в %d, тип цели: %d',\n    playerid, data.targetId, data.hitType\n  ))\nend"
+          },
+          {
+            "type": "theory",
+            "content": "RakLua (#Northn, Blast.hk) предоставляет хуки для перехвата пакетов на уровне RakNet. Это позволяет работать с синхронизацией напрямую, не дожидаясь высокоуровневых событий SAMP.Lua.",
+            "codeSnippet": "-- Пример перехвата OnFootSync через RakLua\naddEventHandler('onFootSync', function(playerid, bs)\n  local health = raknetBitStreamReadUint8(bs)\n  local armour = raknetBitStreamReadUint8(bs)\n  print(string.format(\n    'Player %d: HP=%d, Armour=%d',\n    playerid, health, armour\n  ))\nend)"
           },
           {
             "type": "fill_blanks",
             "question": "Прочитай целое число из BitStream:",
-            "codeSnippet": "local value = {{0}}({{1}})",
+            "codeSnippet": "local value = {{0}}({{1}})\nprint('Значение: ' .. value)",
             "options": ["raknetBitStreamReadInt32", "bs", "raknetRead", "bitStream", "int"],
             "correctAnswers": ["raknetBitStreamReadInt32", "bs"]
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Что произойдёт если читать из BitStream типы не в том порядке?",
+            "options": [
+              "Игра вылетит",
+              "Ошибка Lua",
+              "Данные окажутся некорректными",
+              "BitStream сбросится в начало"
+            ],
+            "correctAnswer": "Данные окажутся некорректными"
           },
           {
             "type": "matching_pairs",
             "question": "Типы данных в BitStream:",
             "pairs": [
-              { "left": "Int32", "right": "4 байта (целое)" },
+              { "left": "Int32", "right": "4 байта (целое со знаком)" },
               { "left": "Float", "right": "4 байта (дробное)" },
-              { "left": "Uint8", "right": "1 байт (0-255)" }
+              { "left": "Uint8", "right": "1 байт (0–255)" },
+              { "left": "Bool", "right": "1 бит (true/false)" }
             ]
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Создай BitStream и запиши значение:",
+            "codeSnippet": "local bs = {{0}}()\n{{1}}(bs, 9999)\nraknetSendRpcEx(0, bs)",
+            "options": ["raknetNewBitStream", "raknetBitStreamWriteInt32", "newBitStream", "writeInt", "createBS"],
+            "correctAnswers": ["raknetNewBitStream", "raknetBitStreamWriteInt32"]
+          }
+        ]
+      },
+      {
+        "id": "hooks-advanced",
+        "title": "Хуки и перехват функций",
+        "description": "Библиотека hook для MoonLoader.",
+        "difficulty": "expert",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "Библиотека `hook` от Musaigen (Blast.hk, тред #229794) предоставляет продвинутые хуки для MoonLoader. Позволяет перехватывать вызовы функций GTA SA / SA:MP на уровне C, не ломая другие скрипты.",
+            "codeSnippet": "local hook = require 'hook'\n\n-- Перехват функции по адресу\nlocal origFunc\norigFunc = hook.new(0x671340, function(ped, weapon)\n  print('Ped ' .. ped .. ' получил оружие ' .. weapon)\n  return origFunc(ped, weapon)  -- Вызвать оригинальную\nend, 'void', {'int', 'int'})"
+          },
+          {
+            "type": "theory",
+            "content": "Хуки позволяют изменять поведение игры на низком уровне. Например, перехват функции выдачи здоровья позволяет нормализовать значения, а перехват рендера — добавить своё отображение.",
+            "codeSnippet": "-- Пример из DrunklLevel Fix (Blast.hk #247739)\n-- Хук для исправления эффекта опьянения\nlocal hook = require 'hook'\n\nhook.new(0x 71A5E0, function(ped, drunkLevel)\n  -- Устанавливаем 0 вместо реального значения\n  return originalSetDrunkLevel(ped, 0)\nend)"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Что нужно сделать с оригинальной функцией при хуке, чтобы сохранить стандартное поведение?",
+            "options": [
+              "Ничего, она вызывается автоматически",
+              "Сохранить в переменную и вызвать вручную",
+              "Вернуть nil",
+              "Пересоздать с нуля"
+            ],
+            "correctAnswer": "Сохранить в переменную и вызвать вручную"
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Подключи библиотеку хуков:",
+            "codeSnippet": "local hook = {{0}} 'hook'\nlocal orig\norig = hook.{{1}}(0x671340, function(a, b)\n  return orig(a, b)\nend, 'void', {'int', 'int'})",
+            "options": ["require", "new", "import", "create", "hook"],
+            "correctAnswers": ["require", "new"]
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Уровни перехвата в MoonLoader скриптинге:",
+            "pairs": [
+              { "left": "samp.events", "right": "Высокий уровень (SA:MP RPC)" },
+              { "left": "BitStream напрямую", "right": "Средний уровень (RakNet)" },
+              { "left": "hook.new(address)", "right": "Низкий уровень (C функции GTA)" }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "modules-libraries",
+        "title": "Библиотеки MoonLoader",
+        "description": "Экосистема готовых библиотек.",
+        "difficulty": "expert",
+        "tasks": [
+          {
+            "type": "theory",
+            "content": "На Blast.hk (тред #190033) собраны основные библиотеки для MoonLoader. Ключевые: `inicfg` (конфиги), `imgui`/`mimgui` (GUI), `vkeys` (клавиши), `encoding` (кодировки), `requests` (HTTP), `samp.events` (события SA:MP), `memory` (память).",
+            "codeSnippet": "-- Стандартный набор импортов для полноценного скрипта\nrequire 'lib.moonloader'\nlocal sampev  = require 'lib.samp.events'\nlocal imgui   = require 'imgui'\nlocal vkeys   = require 'vkeys'\nlocal inicfg  = require 'inicfg'\nlocal memory  = require 'memory'\nlocal encoding = require 'encoding'\nencoding.default = 'CP1251'\nu8 = encoding.UTF8"
+          },
+          {
+            "type": "theory",
+            "content": "Библиотека `mimgui` — более современная альтернатива `imgui`, от #Northn (Blast.hk тред #66959). Она имеет улучшенный рендер, поддержку GIF и более простой API для работы с текстом.",
+            "codeSnippet": "-- mimgui вместо классического imgui\nlocal mimgui = require 'mimgui'\nlocal new = mimgui.new\nlocal v = mimgui.pointer\n\nlocal window = new.bool(false)\n\nmimgui.OnFrame(function()\n  if window[0] then\n    mimgui.Begin('Окно', window)\n    mimgui.Text('Привет!')\n    mimgui.End()\n  end\nend)"
+          },
+          {
+            "type": "multiple_choice",
+            "question": "Какую библиотеку нужно подключить для работы с клавишами в MoonLoader?",
+            "options": ["keys", "vkeys", "keyboard", "input"],
+            "correctAnswer": "vkeys"
+          },
+          {
+            "type": "matching_pairs",
+            "question": "Библиотека и её назначение:",
+            "pairs": [
+              { "left": "inicfg", "right": "Работа с .ini конфигами" },
+              { "left": "vkeys", "right": "Коды клавиш" },
+              { "left": "encoding", "right": "Конвертация кодировок" },
+              { "left": "requests", "right": "HTTP запросы" }
+            ]
+          },
+          {
+            "type": "fill_blanks",
+            "question": "Подключи библиотеку vkeys и проверь нажатие INSERT:",
+            "codeSnippet": "local vkeys = {{0}} 'vkeys'\n\nif {{1}}(vkeys.VK_INSERT) then\n  sampAddChatMessage('INSERT нажат!', -1)\nend",
+            "options": ["require", "wasKeyPressed", "import", "isKeyDown", "getKey"],
+            "correctAnswers": ["require", "wasKeyPressed"]
           }
         ]
       }
