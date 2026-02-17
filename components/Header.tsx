@@ -4,10 +4,12 @@ import { UserStats } from '../types';
 
 interface HeaderProps {
   stats: UserStats;
+  theme: 'dark' | 'light';
+  onToggleTheme: () => void;
   onReset?: () => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ stats, onReset }) => {
+const Header: React.FC<HeaderProps> = ({ stats, theme, onToggleTheme, onReset }) => {
   const handleReset = (e: React.MouseEvent) => {
     e.preventDefault();
     if (confirm("⚠️ ВНИМАНИЕ: Ты хочешь полностью очистить историю обучения? Твой опыт, уровень и достижения будут удалены навсегда. Сбросить?")) {
@@ -16,27 +18,37 @@ const Header: React.FC<HeaderProps> = ({ stats, onReset }) => {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#0d0d0d] border-b border-gray-800 px-4 py-3 shadow-lg shadow-black/50">
-      <div className="max-w-4xl mx-auto flex items-center justify-between">
+    <header className="sticky top-0 z-50 bg-[#0d0d0d] border-b border-gray-800 px-4 py-3 shadow-lg shadow-black/50 transition-colors duration-300">
+      <div className="max-max-w-4xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-orange-600 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-[0_0_15px_rgba(234,88,12,0.3)]">
             S
           </div>
-          <span className="font-extrabold text-xl tracking-tight hidden sm:block">Solo<span className="text-orange-500">Blast</span></span>
+          <span className="font-extrabold text-xl tracking-tight hidden sm:block text-white">Solo<span className="text-orange-500">Blast</span></span>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-6">
+        <div className="flex items-center gap-2 sm:gap-6">
+          <div className="flex items-center gap-3 mr-2">
+            <button 
+              onClick={onToggleTheme}
+              className="w-10 h-10 flex items-center justify-center rounded-xl bg-gray-800/50 hover:bg-orange-500/20 border border-gray-700 hover:border-orange-500 transition-all text-xl"
+              title={theme === 'dark' ? 'Включить светлую тему' : 'Включить темную тему'}
+            >
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
+          </div>
+
           <div className="flex items-center gap-1.5" title="Твой уровень">
             <span className="text-blue-400 font-black text-xs sm:text-sm">LVL</span>
-            <span className="font-black text-sm sm:text-lg tabular-nums">{stats.level}</span>
+            <span className="font-black text-sm sm:text-lg tabular-nums text-white">{stats.level}</span>
           </div>
           <div className="flex items-center gap-1.5" title="Набранный опыт">
             <span className="text-yellow-500 text-sm sm:text-xl">⚡</span>
-            <span className="font-black text-sm sm:text-lg tabular-nums">{stats.exp}</span>
+            <span className="font-black text-sm sm:text-lg tabular-nums text-white">{stats.exp}</span>
           </div>
           <div className="flex items-center gap-1.5" title="Жизни">
             <span className="text-red-500 text-sm sm:text-xl">❤️</span>
-            <span className="font-black text-sm sm:text-lg tabular-nums">{stats.hearts}</span>
+            <span className="font-black text-sm sm:text-lg tabular-nums text-white">{stats.hearts}</span>
           </div>
           
           <div className="h-6 w-[1px] bg-gray-800 mx-1 hidden sm:block"></div>

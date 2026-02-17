@@ -8,7 +8,8 @@ import Leaderboard from './components/Leaderboard';
 import { UserStats, Lesson, AppState, Section } from './types';
 import { MAX_HEARTS, ACHIEVEMENTS, processRawSections } from './constants';
 
-const STORAGE_KEY = 'soloblast_user_stats';
+const STATS_KEY = 'soloblast_user_stats';
+const THEME_KEY = 'soloblast_theme';
 
 const DEFAULT_STATS: UserStats = {
   exp: 0,
@@ -21,11 +22,14 @@ const DEFAULT_STATS: UserStats = {
 
 const App: React.FC = () => {
   const [appState, setAppState] = useState<AppState>(AppState.DASHBOARD);
+  const [theme, setTheme] = useState<'dark' | 'light'>(() => {
+    return (localStorage.getItem(THEME_KEY) as 'dark' | 'light') || 'dark';
+  });
   
   // Initialize state from localStorage if available
   const [stats, setStats] = useState<UserStats>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
+      const saved = localStorage.getItem(STATS_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         return { ...DEFAULT_STATS, ...parsed };
@@ -40,9 +44,19 @@ const App: React.FC = () => {
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [showNotification, setShowNotification] = useState<string | null>(null);
 
+  // Apply theme to body
+  useEffect(() => {
+    if (theme === 'light') {
+      document.body.classList.add('light');
+    } else {
+      document.body.classList.remove('light');
+    }
+    localStorage.setItem(THEME_KEY, theme);
+  }, [theme]);
+
   // Persistence effect: save stats whenever they change
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(stats));
+    localStorage.setItem(STATS_KEY, JSON.stringify(stats));
   }, [stats]);
 
   useEffect(() => {
@@ -60,12 +74,13 @@ const App: React.FC = () => {
     loadData();
   }, []);
 
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+  };
+
   const resetProgress = () => {
-    // Clear the specific key and reload to ensure clean slate
-    localStorage.removeItem(STORAGE_KEY);
-    // Explicitly set default stats just in case something tries to render before reload
+    localStorage.removeItem(STATS_KEY);
     setStats(DEFAULT_STATS);
-    // Reload the page
     window.location.href = window.location.pathname;
   };
 
@@ -131,7 +146,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-20 overflow-x-hidden selection:bg-orange-500/30">
-      <Header stats={stats} onReset={resetProgress} />
+      <Header stats={stats} theme={theme} onToggleTheme={toggleTheme} onReset={resetProgress} />
 
       <main className="max-w-4xl mx-auto px-4">
         {(appState === AppState.DASHBOARD || appState === AppState.ACHIEVEMENTS || appState === AppState.LEADERBOARD) && (
@@ -146,9 +161,9 @@ const App: React.FC = () => {
             </div>
 
             <div className="flex flex-wrap justify-center gap-2 sm:gap-4 mb-12">
-               <button onClick={() => setAppState(AppState.DASHBOARD)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${appState === AppState.DASHBOARD ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-900/50 text-gray-500 hover:text-gray-300 border border-gray-800'}`}>Уроки</button>
-               <button onClick={() => setAppState(AppState.LEADERBOARD)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${appState === AppState.LEADERBOARD ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-900/50 text-gray-500 hover:text-gray-300 border border-gray-800'}`}>Топ</button>
-               <button onClick={() => setAppState(AppState.ACHIEVEMENTS)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all relative ${appState === AppState.ACHIEVEMENTS ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-900/50 text-gray-500 hover:text-gray-300 border border-gray-800'}`}>Медали</button>
+               <button onClick={() => setAppState(AppState.DASHBOARD)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${appState === AppState.DASHBOARD ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-800/50 text-gray-500 hover:text-gray-300 border border-gray-700'}`}>Уроки</button>
+               <button onClick={() => setAppState(AppState.LEADERBOARD)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all ${appState === AppState.LEADERBOARD ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-800/50 text-gray-500 hover:text-gray-300 border border-gray-700'}`}>Топ</button>
+               <button onClick={() => setAppState(AppState.ACHIEVEMENTS)} className={`px-5 py-2.5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all relative ${appState === AppState.ACHIEVEMENTS ? 'bg-orange-600 text-white shadow-lg shadow-orange-900/40' : 'bg-gray-800/50 text-gray-500 hover:text-gray-300 border border-gray-700'}`}>Медали</button>
             </div>
           </>
         )}

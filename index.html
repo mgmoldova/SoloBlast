@@ -14,21 +14,64 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
 
     <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #161616;
+            --text-primary: #e5e7eb;
+            --text-secondary: #9ca3af;
+            --border-color: #1f2937;
+        }
+
+        body.light {
+            --bg-primary: #f9fafb;
+            --bg-secondary: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --border-color: #e5e7eb;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0d0d0d;
-            color: #e5e7eb;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+        
         .mono {
             font-family: 'JetBrains Mono', monospace;
         }
-        .blast-gradient {
-            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
-        }
-        /* Custom adjustment for highlight.js background to match our UI */
+
+        /* Override Tailwind bg/text classes for theme responsiveness */
+        .theme-bg-primary { background-color: var(--bg-primary); }
+        .theme-bg-secondary { background-color: var(--bg-secondary); }
+        .theme-text-primary { color: var(--text-primary); }
+        .theme-text-secondary { color: var(--text-secondary); }
+        .theme-border { border-color: var(--border-color); }
+
+        /* Custom adjustment for highlight.js background */
         pre code.hljs {
             background: transparent !important;
             padding: 0 !important;
+        }
+        
+        body.light .bg-[#1a1a1a], 
+        body.light .bg-[#161616],
+        body.light .bg-[#0d0d0d] {
+            background-color: var(--bg-secondary) !important;
+            border-color: var(--border-color) !important;
+        }
+
+        body.light .text-gray-400,
+        body.light .text-gray-500 {
+            color: var(--text-secondary) !important;
+        }
+
+        body.light .text-white {
+            color: var(--text-primary) !important;
+        }
+        
+        body.light .border-gray-800 {
+            border-color: var(--border-color) !important;
         }
     </style>
 <script type="importmap">
